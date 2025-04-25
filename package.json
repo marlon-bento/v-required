@@ -1,6 +1,6 @@
 {
   "name": "v-required",
-  "version": "1.0.0",
+  "version": "1.0.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,13 @@
     "type": "git",
     "url": "https://github.com/marlon-bento/v-required"
   },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "utils.js",
+    "types.ts"
+  ],
   "author": "Márlon Bento Azevedo",
-  "license": "ISC"
+  "license": "ISC",
+  "types": "index.d.ts"
 }

@@ -74,7 +74,3 @@ export default {
     },
 };
 
-// import {RulesMap, ErrosSettings} from "./types.ts";
-// export {RulesMap, ErrosSettings};
-// import {validForm, validate, senderErrorsDynamic, senderErrors } from "./utils.js";
-// export {validForm, validate, senderErrorsDynamic, senderErrors};
