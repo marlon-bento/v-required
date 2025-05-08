@@ -12,24 +12,20 @@ export function senderErrors(rules, errosSettings) {
         }));
     }
 }
-export function senderErrorsDynamic(rules, errosSettings) {
-    for (const field in rules) {
-        errosSettings[field].length = 0; // limpa antes de preencher
 
-        const fieldArray = models[field]; // por exemplo: models.unidades
-
-        fieldArray.forEach((_, index) => {
-            const errorItem = {};
-
-            for (const innerField in rules[field]) {
-                errorItem[innerField] = rules[field][innerField].map(([message, cond]) => ({
-                    message,
-                    condition: cond(index), // passa o index!
-                }));
+export function senderErrorsDynamic(rulesDynamic, errosSettings) {
+    for (const field in rulesDynamic) {
+        for (const subField in rulesDynamic[field]) {
+            // percorre todos errosSettings
+            for (let i = 0; i < errosSettings[field].length; i++) {
+                errosSettings[field][i][subField] = rulesDynamic[field][subField].map(
+                    ([message, cond]) => ({
+                        message,
+                        condition: cond(i),
+                    })
+                );
             }
-
-            errosSettings[field].push(errorItem);
-        });
+        }
     }
 }
 export const validate = {

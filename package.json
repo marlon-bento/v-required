@@ -1,6 +1,6 @@
 {
   "name": "v-required",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,13 @@
     "utils.js",
     "types.ts"
   ],
-  "author": "Márlon Bento Azevedo",
+  "author": "Márlon Bento Azevedo (https://github.com/marlon-bento)",
   "license": "ISC",
+  "contributors": [
+    {
+      "name": "Jansem Wallemberg Torquetti Maia",
+      "url": "https://github.com/JansemWall"
+    }
+  ],
   "types": "index.d.ts"
 }
