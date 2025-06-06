@@ -55,6 +55,10 @@ function helpMethodsRequired(el, binding, mounted = false) {
             span.innerHTML = "";
             el.classList.remove("style-custom-v-required-error");
         }
+    }else if("activeError" in binding && !binding.activeError) {
+        // se activeError for false, limpa o span e remove a classe de erro
+        span.innerHTML = "";
+        el.classList.remove("style-custom-v-required-error");
     }
     /* uso
       ...

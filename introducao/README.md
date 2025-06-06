@@ -646,11 +646,73 @@ function delUnidade(index) {
 </style>
 ```
 
+## Usando o `v-required` com TypeScript
 
+O `v-required` oferece suporte completo à tipagem com TypeScript, o que torna a validação de formulários mais segura e previsível durante o desenvolvimento.
 
+Ao importar as tipagens disponibilizadas pelo pacote, como `RulesMap` e `ErrosSettings`, você garante:
 
+- **Prevenção de erros** ao usar os campos de validação;
+- **Maior legibilidade** e manutenção do código.
 
+### Exemplo de uso com tipagem:
 
+```ts
+import { reactive, ref, watchEffect } from "vue";
+
+/*--------------------- Imports do v-required ----------------------*/
+import { validForm, senderErrors, validate } from "v-required/utils";
+import type { RulesMap, ErrosSettings } from "v-required/types";
+/*------------------ Fim dos imports ---------------------*/
+
+// Tipagem reativa para armazenar os erros dos campos
+const errosSettings: ErrosSettings = reactive({
+  titulo: [],
+  editorContent: [],
+  file: [],
+});
+
+// Funções auxiliares de validação
+function checkHasFile(file: File | null): boolean {
+  return !file;
+}
+function checkFileSize(file: File | null): boolean {
+  if (!file) return true;
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  return file.size <= maxSize;
+}
+function checkFileType(file: File | null): boolean {
+  if (!file) return true;
+  const allowedTypes = ["application/pdf"];
+  return allowedTypes.includes(file.type);
+}
+
+// Regras com tipagem garantida
+const rules: RulesMap = {
+  titulo: [
+    [
+      "O nome do curso é obrigatório.",
+      () => validate.isEmptyString(models.titulo),
+    ],
+  ],
+  editorContent: [
+    [
+      "O conteúdo é obrigatório.",
+      () => validate.isEmptyString(models.editorContent),
+    ],
+  ],
+  file: [
+    ["O arquivo é obrigatório.", () => checkHasFile(models.file)],
+    ["O arquivo deve ser do tipo PDF.", () => !checkFileType(models.file)],
+    ["O arquivo deve ter no máximo 5MB.", () => !checkFileSize(models.file)],
+  ],
+};
+
+watchEffect(() => {
+  senderErrors(rules, errosSettings);
+});
+
+```
 
 
 
