@@ -16,14 +16,16 @@ export function senderErrors(rules, errosSettings) {
 export function senderErrorsDynamic(rulesDynamic, errosSettings) {
     for (const field in rulesDynamic) {
         for (const subField in rulesDynamic[field]) {
-            // percorre todos errosSettings
-            for (let i = 0; i < errosSettings[field].length; i++) {
-                errosSettings[field][i][subField] = rulesDynamic[field][subField].map(
-                    ([message, cond]) => ({
-                        message,
-                        condition: cond(i),
-                    })
-                );
+            if (Array.isArray(errosSettings[field])) {
+                // percorre todos errosSettings
+                for (let i = 0; i < errosSettings[field].length; i++) {
+                    errosSettings[field][i][subField] = rulesDynamic[field][subField].map(
+                        ([message, cond]) => ({
+                            message,
+                            condition: cond(i),
+                        })
+                    );
+                }
             }
         }
     }

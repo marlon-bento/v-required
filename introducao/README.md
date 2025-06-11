@@ -715,6 +715,30 @@ watchEffect(() => {
 ```
 
 
+## 📦 Atualização v1.1.2
+
+### ✨ Novidade
+
+A partir da versão 1.1.2, agora é possível inicializar `errosSettings` como um objeto vazio!
+
+```js
+const errosSettings = reactive({});
+```
+As funções:
+
+- `senderErrors`
+
+- `senderErrorsDynamic`
+
+passam a montar automaticamente a estrutura do objeto reativo `errosSettings` com base nas regras (`rules`) definidas, eliminando a necessidade de declarar previamente todas as chaves.
+
+### ✅ Benefícios
+
+- Menos repetição e código
+
+- Inicialização dinâmica e automática
+
+- Melhor escalabilidade para formulários grandes
 
 
 
