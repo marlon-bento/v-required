@@ -26,6 +26,18 @@ export function senderErrorsDynamic(rulesDynamic, errosSettings) {
                         })
                     );
                 }
+            }else {
+                // inicializa o errorSettings (se não existir) com os fields e subfields
+                errosSettings[field] = [];
+                for (let i = 0; i < rulesDynamic[field][subField].length; i++) {
+                    errosSettings[field][i] = {};
+                    errosSettings[field][i][subField] = rulesDynamic[field][subField].map(
+                        ([message, cond]) => ({
+                            message,
+                            condition: cond(i),
+                        })
+                    );
+                }
             }
         }
     }
