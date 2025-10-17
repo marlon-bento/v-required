@@ -1,0 +1,1 @@
+export { default as vRequired } from './v-required';

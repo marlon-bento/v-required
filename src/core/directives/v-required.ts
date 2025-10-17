@@ -1,4 +1,4 @@
-function helpMethodsRequired(el, binding, mounted = false) {
+function helpMethodsRequired(el: HTMLElement, binding: any, mounted = false) {
     // erros de tipos de parâmetros
     if (binding === undefined)
         throw new Error("v-required precisa de um parâmetro, no mínimo o list");
@@ -10,10 +10,7 @@ function helpMethodsRequired(el, binding, mounted = false) {
         throw new Error("v-required precisa que o parâmetro list seja um array");
 
     let span;
-    const input =
-        el.querySelector("input") ||
-        el.querySelector("textarea") ||
-        el.querySelector("select");
+
     // só cria a estrutura na montagem
     if (mounted) {
         //cria um span que vai receber o erro
@@ -31,7 +28,7 @@ function helpMethodsRequired(el, binding, mounted = false) {
     let hasError = false;
 
     /* avalia se foi passada a propriedade list 
-           e se caaso foi passado também activeError avalia se é para mostrar a lista de erros */
+           e se caso foi passado também activeError avalia se é para mostrar a lista de erros */
     if ("activeError" in binding ? binding.activeError : true) {
         const list = binding.list;
         // percorre a lista de erros
@@ -45,20 +42,27 @@ function helpMethodsRequired(el, binding, mounted = false) {
             // verificação para campos com condição
             else if (list[i].condition) {
                 hasError = true;
+                if (span) {
+                    span.innerHTML = list[i].message;
+                    el.classList.add("style-custom-v-required-error");
+                }
                 // adiciona a mensagem de erro no span
-                span.innerHTML = list[i].message;
-                el.classList.add("style-custom-v-required-error");
+
                 break;
             }
         }
         if (!hasError) {
+            if (span) {
+                span.innerHTML = "";
+                el.classList.remove("style-custom-v-required-error");
+            }
+        }
+    } else if ("activeError" in binding && !binding.activeError) {
+        if (span) {
+            // se activeError for false, limpa o span e remove a classe de erro
             span.innerHTML = "";
             el.classList.remove("style-custom-v-required-error");
         }
-    }else if("activeError" in binding && !binding.activeError) {
-        // se activeError for false, limpa o span e remove a classe de erro
-        span.innerHTML = "";
-        el.classList.remove("style-custom-v-required-error");
     }
     /* uso
       ...
@@ -70,11 +74,10 @@ function helpMethodsRequired(el, binding, mounted = false) {
       */
 }
 export default {
-    mounted(el, binding) {
+    mounted(el: HTMLElement, binding: any) {
         helpMethodsRequired(el, binding.value, true);
     },
-    updated(el, binding) {
+    updated(el: HTMLElement, binding: any) {
         helpMethodsRequired(el, binding.value);
     },
 };
-

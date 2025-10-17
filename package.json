@@ -1,22 +1,39 @@
 {
   "name": "v-required",
-  "version": "1.1.4",
-  "description": "",
+  "private": false,
+  "version": "2.0.0",
+  "author": "Márlon Bento Azevedo (https://github.com/marlon-bento)",
+  "description": "Componente Vue 3 para validação reativa de formulários, facilitando a criação de formulários dinâmicos e interativos com regras de validação personalizáveis.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vue-tsc -b && vite build"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/marlon-bento/v-required"
   },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./core": {
+      "import": "./dist/core.js"
+    },
+    "./types": {
+      "import": "./dist/types.js"
+    },
+    "./utils": {
+      "import": "./dist/utils.js"
+    },
+    "./validation": {
+      "import": "./dist/validation.js"
+    }
+  },
   "files": [
-    "index.js",
-    "index.d.ts",
-    "utils.js",
-    "types.ts"
+    "dist",
+    "src"
   ],
-  "author": "Márlon Bento Azevedo (https://github.com/marlon-bento)",
   "license": "ISC",
   "contributors": [
     {
@@ -48,5 +65,30 @@
     "modular-validation",
     "validation-rules"
   ],
-  "types": "index.d.ts"
+  "types": "index.d.ts",
+  "peerDependencies": {
+    "@tabler/icons-vue": "^3.35.0",
+    "vue": "^3.2.0"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.6",
+    "@semantic-release/npm": "^12.0.2",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "@types/node": "^24.6.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "sass-embedded": "^1.93.2",
+    "semantic-release": "^24.2.9",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7",
+    "vue-tsc": "^3.1.0"
+  },
+  "dependencies": {
+    "pinia": "^3.0.3",
+    "vue": "^3.2.0"
+  }
 }

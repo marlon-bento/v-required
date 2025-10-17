@@ -11,6 +11,212 @@ A diretiva personalizada ```v-required``` é usada para validação de campos de
 Ela facilita o gerenciamento dos erros com uma **estrutura padronizada**, tanto para mensagens quanto para as condições que disparam os erros.
 
 
+
+# 🚀 Novidades da Versão 2.0.0: Validação com Componentes!
+
+A partir da versão 2.0.0, o ```v-required``` evoluiu para uma abordagem mais moderna, declarativa e poderosa, utilizando componentes. Embora o método antigo com a diretiva v-required="{...}" continue funcionando para garantir a retrocompatibilidade, a nova abordagem com componentes é agora a forma recomendada de uso.
+
+As principais vantagens são:
+
+- Templates mais limpos: As regras de validação são declaradas diretamente no template, junto aos campos.
+
+- Menos lógica no script: Elimina a necessidade de gerenciar manualmente os objetos rules e errosSettings.
+
+- Reatividade Aprimorada: A validação se torna totalmente reativa e integrada ao ciclo de vida dos componentes.
+
+## O Trio Principal da v2.0.0
+A nova abordagem é baseada em três exportações principais que você importa diretamente da biblioteca:
+
+1. ```initVrequired()```: Um composable que se torna o novo "cérebro" da sua validação. Ele gerencia todo o estado reativo.
+
+2. ```<VRequired>```: Um componente que "envolve" cada campo do seu formulário que precisa de validação.
+
+3. ```<VRule>```: Um componente "renderless" que você coloca dentro do ```<VRequired>``` para definir cada regra de validação específica para aquele campo.
+
+Como Iniciar
+
+No ```<script setup>``` do seu ambiente, basta chamar o ```initVrequired()``` para obter tudo o que você precisa:
+
+1. ```rules```: Um objeto reativo onde as regras dos componentes ```<VRule>``` serão registradas automaticamente. Você o passa como prop para o ```<VRequired>```.
+
+2. ```config```: O substituto do antigo ```errosSettings```. É um objeto reativo que conterá os erros calculados. O ```<VRequired>``` usa essa prop para obter a lista de erros correta.
+
+3. ```haveError```: Uma função que retorna ```true``` se houver qualquer erro no formulário. Ideal para usar na sua função de envio.
+
+Exemplo 1: Validação de Campos Simples
+
+Para campos de formulário padrão (que não estão em um v-for), a estrutura é simples: envolva seu input com ```<VRequired>``` e declare suas regras com ```<VRule>``` dentro dele.
+
+script:
+```html
+<script setup>
+import { ref, reactive } from "vue";
+/* ====== IMPORTS DA BIBLIOTECA V-REQUIRED ====== */
+import { initVrequired, VRequired, VRule } from "v-required/validation";
+/* ========================================= */
+
+const activeError = ref(false);
+const models = reactive({
+  nome_curso: "",
+  num_vagas: 0,
+});
+const { rules, config, haveError } = initVrequired()
+
+const enviarFormulario = async () => {
+  activeError.value = true;
+  // Nova forma de validar, muito mais limpa.
+  if (haveError()) {
+    // entrou então tem erro e não deixa enviar
+    // A rolagem para o erro já é gerenciada pela biblioteca
+    return; 
+
+  }
+  await submitContent();
+};
+
+</script>
+
+```
+template:
+```html
+<template>
+  <v-required name="nome_curso" :config="config" :rules="rules" :active-error="activeError">
+          <input v-model="models.nome_curso" type="text"
+          placeholder="Insira o nome do curso" />
+          <v-rule message="O nome do
+          curso é obrigatório." :error="() => !models.nome_curso" />
+  </v-required>
+
+  <v-required name="num_vagas" :config="config" :rules="rules" :active-error="activeError">
+            <input v-model="models.num_vagas" type="number"
+            placeholder="Número de vagas" />
+            <v-rule message="Insira um número válido de vagas."
+                  :error="() => (!models.num_vagas || models.num_vagas === 0) && models.modalidade === '0'" 
+            />
+            <v-rule 
+            message="não pode ser menor que zero."
+            :error="() => (models.num_vagas < 0)"
+            />
+  </v-required>
+</template>
+```
+
+Exemplo 2: Validação de Campos Dinâmicos (com ```v-for```)
+A nova abordagem simplifica drasticamente a validação de campos dinâmicos. Agora, você trata cada campo dinâmico como um campo simples, mas com um nome único que inclui o seu ```index```.
+
+A lógica é a seguinte:
+
+Você mantém o controle total do seu ```v-for```.
+
+Dentro do loop, cada campo a ser validado é envolvido por seu próprio ```<VRequired>```.
+
+A prop ```:name``` do ```<VRequired>``` é construída dinamicamente para ser única (ex: ```:name="'unidade_nome_' + index"```).
+
+Isso "simplifica" a estrutura de regras, tornando-a compatível com a lógica simples, garantindo performance.
+
+Script:
+```html
+<script setup>
+import { ref, reactive } from "vue";
+/* ====== IMPORTS DA BIBLIOTECA V-REQUIRED ====== */
+import { initVrequired, VRequired, VRule } from "v-required/validation";
+/* ========================================= */
+const optionsTurnos = ref([
+  { name: "Manhã" },
+  { name: "Tarde" },
+  { name: "Noite" },
+]);
+const activeError = ref(false);
+const models = reactive({
+  unidades: [{ nome: "", turnos: "" }],
+});
+
+const { rules, config, haveError } = initVrequired()
+
+const enviarFormulario = async () => {
+  activeError.value = true;
+
+  if (haveError()) {
+    return; 
+  }
+  await submitContent();
+};
+/* id serve apenas para ser usado no template como key="unidade.id"
+ isso para garantir que quando um item seja deletado não afete os
+ outros e o v-for vai saber exatamente quem é dono de cada item */
+const id_unico = ref(1);
+function addUnidade() {
+  // Agora só precisamos nos preocupar com o modelo de dados.
+  // A reatividade do Vue e do v-required cuidará da validação.
+  models.unidades.push({ nome: "", turnos: "", id: ++id_unico.value });
+}
+function delUnidade(index) {
+  models.unidades.splice(index, 1);
+}
+</script>
+
+```
+
+Template:
+```html
+<template>
+  <div v-for="(unidade, index) in models.unidades" :key="unidade.id" class="row align-items-center mb-3">
+      <v-required :name="`unidade_nome_${unidade.id}`" :config="config" :rules="rules" :active-error="activeError">
+        <div class="col-5">
+          <input v-model="unidade.nome" type="text" class="form-control"
+            placeholder="Nome da unidade" />
+        </div>
+        <v-rule
+        message="O nome da unidade é obrigatório."
+        :error="() => !unidade.nome"
+        />
+      </v-required>
+
+      <v-required :name="`unidade_turnos_${unidade.id}`" :config="config" :rules="rules" :active-error="activeError">
+        <div class="col-5">
+          <select name="unidade_turnos" v-model="unidade.turnos" class="form-select">
+            <option value="" selected disabled hidden>Selecione o turno</option>
+            <option v-for="turno in optionsTurnos" :value="turno.name">{{ turno.name }}</option>
+          </select>
+        </div>
+        <v-rule
+        message="Selecione um turno válido para a unidade"
+        :error="() => !unidade.turnos"
+        />
+      </v-required>
+      <div class="">
+        <button @click="delUnidade(index)" class="btn btn-primary">
+          Remover Unidade
+        </button>
+      </div>
+    </div>
+
+
+    <div class="d-flex justify-content-center mt-3">
+      <button @click="addUnidade" class="btn btn-primary">
+        <span v-html="svgs.plus"></span>Adicionar nova Unidade
+      </button>
+    </div>
+  </div>
+</template>
+```
+
+## Resumidamente:
+
+- Regras de cada campo são criadas automaticamente quando você insere uma nova ```<v-rule>``` dentro de um ```<v-required>```.
+
+- Quando ```activeError``` for ```true``` o erro será exibido 'caso exista' (mesma lógica da versão antiga)
+
+- Para saber se tem erro em algum campo e fazer o scroll automatico para eles (usar a função ```hasError```)
+
+- Agora rules e config são gerenciadas automaticamente (mas precisam ser passadas como props para o componente)
+
+- Assim como a versão antiga a nova possui exatamente a mesma instalação (a diretiva precisa ser adicionada no main.js)
+
+- Importante lembrar que para os dinâmicos, se for ter uma função para deletar, será preciso um id único para cada campo, garantindo a reatividade correta
+
+# Versão antiga (ainda funcional):
+
 ## ✅ Como funciona
 🔹 **Lista de validações**
 
