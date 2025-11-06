@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, useSlots } from 'vue';
+import { inject, onMounted, useSlots, defineSlots } from 'vue';
 import { vRequiredApiKey } from '../keys/keys';
 
 interface VrulesProps {
@@ -13,6 +13,10 @@ interface VrulesProps {
 }
 const props = withDefaults(defineProps<VrulesProps>(), {
 });
+
+defineSlots<{
+  body?: () => any 
+}>();
 
 const slots = useSlots();
 const parentApi = inject(vRequiredApiKey);

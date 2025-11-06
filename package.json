@@ -1,7 +1,7 @@
 {
   "name": "v-required",
   "private": false,
-  "version": "2.0.0",
+  "version": "2.0.2",
   "author": "Márlon Bento Azevedo (https://github.com/marlon-bento)",
   "description": "Componente Vue 3 para validação reativa de formulários, facilitando a criação de formulários dinâmicos e interativos com regras de validação personalizáveis.",
   "main": "index.js",
@@ -15,19 +15,24 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./core": {
-      "import": "./dist/core.js"
+      "import": "./dist/core.js",
+      "types": "./dist/core.d.ts"
     },
     "./types": {
-      "import": "./dist/types.js"
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
     },
     "./utils": {
-      "import": "./dist/utils.js"
+      "import": "./dist/utils.js",
+      "types": "./dist/utils.d.ts"
     },
     "./validation": {
-      "import": "./dist/validation.js"
+      "import": "./dist/validation.js",
+      "types": "./dist/validation.d.ts"
     }
   },
   "files": [
@@ -67,7 +72,6 @@
   ],
   "types": "index.d.ts",
   "peerDependencies": {
-    "@tabler/icons-vue": "^3.35.0",
     "vue": "^3.2.0"
   },
   "devDependencies": {
@@ -85,10 +89,10 @@
     "semantic-release": "^24.2.9",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
+    "vite-plugin-dts": "^4.5.4",
     "vue-tsc": "^3.1.0"
   },
   "dependencies": {
-    "pinia": "^3.0.3",
     "vue": "^3.2.0"
   }
 }
