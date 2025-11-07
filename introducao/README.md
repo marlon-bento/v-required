@@ -10,7 +10,64 @@ A diretiva personalizada ```v-required``` é usada para validação de campos de
 
 Ela facilita o gerenciamento dos erros com uma **estrutura padronizada**, tanto para mensagens quanto para as condições que disparam os erros.
 
+# 🚀 Importante!!! a partir da ver v2.1.0 diga adeus as props desnecessárias
 
+Com base na arquitetura da v2.0.0, a próxima versão 2.1.0 simplifica ainda mais o uso da biblioteca, eliminando props que repetitivas.
+
+O objetivo é simples: remover totalmente a necessidade de passar rules e config como props para cada componente ```<VRequired>``` no seu template.
+
+Utilizando o sistema de provide e inject nativo do Vue 3, a v2.1.0 torna o initVrequired o "provedor" central do estado, e o componente ```<VRequired>``` passa a "injetar" esse estado automaticamente.
+
+## 🧐 Como é na v2.0.0 (Antiga)
+
+Na v2.0.0, você precisa obter rules e config do initVrequired e passá-los manualmente para cada ```<VRequired>```:
+
+Script v2.0.0:
+
+```html
+<script setup>
+// Você precisa pegar rules e config para passar no template
+const { rules, config, haveError } = initVrequired()
+</script>
+<template>
+  <v-required name="nome_curso" :config="config" :rules="rules" :active-error="activeError">
+          <input ... />
+          <v-rule ... />
+  </v-required>
+
+  <v-required name="num_vagas" :config="config" :rules="rules" :active-error="activeError">
+            <input ... />
+            <v-rule ... />
+  </v-required>
+</template>
+
+```
+
+## ✨ Como será na v2.1.0 (A Evolução)
+
+Na v2.1.0, o initVrequired "provê" (provide) o estado de rules e config automaticamente para todos os seus componentes filhos. O ```<VRequired>``` "injeta" (inject) esse estado nos bastidores.
+
+```html
+<script setup>
+// Você só precisa do haveError! (ainda tem acesso a rules e config caso queira)
+// rules e config são gerenciados e "providos" internamente pelo initVrequired.
+const { haveError } = initVrequired()
+</script>
+<template>
+  <v-required name="nome_curso"  :active-error="activeError">
+          <input ... />
+          <v-rule ... />
+  </v-required>
+
+  <v-required name="num_vagas"  :active-error="activeError">
+            <input ... />
+            <v-rule ... />
+  </v-required>
+</template>
+
+```
+
+Essa mudança torna os formulários muito menos verbosos e mais fáceis de manter, pois você só precisa se preocupar com o ```name``` e o ```active-error``` de cada campo.
 
 # 🚀 Novidades da Versão 2.0.0: Validação com Componentes!
 
