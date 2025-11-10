@@ -1,11 +1,14 @@
 # Documentação  `v-required`
 
+
 [![npm version](https://img.shields.io/npm/v/v-required)](https://www.npmjs.com/package/v-required)
 [![License: MIT](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
 [![Built with TypeScript](https://img.shields.io/badge/Built%20with-TypeScript-blue)](https://www.typescriptlang.org/)
 <!---
 [![jsDelivr hits (monthly)](https://img.shields.io/jsdelivr/npm/hm/v-required)](https://www.jsdelivr.com/package/npm/v-required)
 -->
+
+<img align="center" width="50%" alt="js-icon"  src="./v-required-logo.jpeg">
 
 
 Elimine a repetição de validações manuais nos seus projetos Vue.js. O `v-required` oferece uma abordagem **declarativa**, **automatizada** e **escalável** para gerenciar validações de campos de formulário.
