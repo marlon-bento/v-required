@@ -1,7 +1,7 @@
 {
   "name": "v-required",
   "private": false,
-  "version": "2.3.0",
+  "version": "2.4.0",
   "author": "Márlon Bento Azevedo (https://github.com/marlon-bento)",
   "description": "Componente Vue 3 para validação reativa de formulários, facilitando a criação de formulários dinâmicos e interativos com regras de validação personalizáveis.",
   "main": "index.js",
