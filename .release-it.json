@@ -16,7 +16,8 @@
   },
   "npm": {
     "publish": true,
-    "provenance": true
+    "provenance": true,
+    "skipChecks": true
   },
   "hooks": {
     "before:npm": "npm run build"
