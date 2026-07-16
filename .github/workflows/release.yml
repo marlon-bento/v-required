@@ -1,0 +1,48 @@
+# ========
+# Este arquivo configura o fluxo de automação usando o Release-It.
+# Ele executa de forma automática a cada push para gerenciar versão,
+# changelog, tags no Git e publicar no NPM usando a permissão nativa 
+# de Trusted Publishing (provenance) sem exigir tokens fixos.
+# ========
+name: Release and Publish
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      # Permissão necessária para o login automático do NPM (OIDC)
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Execute Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx release-it --ci

@@ -1,7 +1,7 @@
 {
   "name": "v-required",
   "private": false,
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "Márlon Bento Azevedo (https://github.com/marlon-bento)",
   "description": "Componente Vue 3 para validação reativa de formulários, facilitando a criação de formulários dinâmicos e interativos com regras de validação personalizáveis.",
   "main": "index.js",
@@ -75,6 +75,7 @@
     "vue": "^3.2.0"
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "^11.0.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/exec": "^7.1.0",
@@ -85,6 +86,7 @@
     "@types/node": "^24.6.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
+    "release-it": "^20.2.1",
     "sass-embedded": "^1.93.2",
     "semantic-release": "^24.2.9",
     "typescript": "~5.9.3",
