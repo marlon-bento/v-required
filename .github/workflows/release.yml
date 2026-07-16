@@ -1,8 +1,8 @@
 # ========
-# Este arquivo configura o fluxo de automação garantindo a estabilidade máxima.
-# O gerenciamento de versão é delegado ao Release-It, enquanto a publicação
-# é feita pelo comando nativo do NPM via hooks, garantindo que o login automático
-# (OIDC / Trusted Publishing) funcione sem bloqueios de segurança de terceiros.
+# Este arquivo configura o fluxo automatizado de release e publicação.
+# Ele utiliza o Release-It para o versionamento e aciona o NPM nativamente
+# via hooks. O uso explícito do registry-url no setup-node é obrigatório
+# para o NPM habilitar o Trusted Publishing, dispensando o uso de tokens.
 # ========
 name: Release and Publish
 
@@ -32,6 +32,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm install
@@ -41,7 +42,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Execute Release and Publish
+      - name: Execute Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx release-it --ci
