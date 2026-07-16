@@ -1,8 +1,8 @@
 # ========
-# Este arquivo configura o fluxo automatizado de release e publicação.
-# O registry-url é obrigatório para que a Action ative o OIDC nativo.
-# O comando npm publish rodará pelo plugin do Release-It antes do commit,
-# garantindo que o hash de segurança do pacote corresponda ao token do GitHub.
+# Arquivo definitivo de automação de versionamento e publicação.
+# O Release-It é isolado para operar apenas no escopo do Git.
+# A compilação e a publicação no NPM são executadas como passos independentes,
+# garantindo que o Trusted Publishing (OIDC) valide a origem sem interferências.
 # ========
 name: Release and Publish
 
@@ -32,10 +32,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Update NPM
-        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm install
@@ -45,7 +41,13 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Execute Release
+      - name: Execute Git Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx release-it --ci
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Publish to NPM
+        run: npm publish --provenance --access public
