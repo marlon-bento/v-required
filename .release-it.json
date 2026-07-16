@@ -15,9 +15,11 @@
     "releaseName": "v${version}"
   },
   "npm": {
-    "publish": false
+    "publish": true,
+    "provenance": true,
+    "skipChecks": true
   },
   "hooks": {
-    "after:release": "npm publish --provenance --access public"
+    "before:npm": "npm run build"
   }
 }
