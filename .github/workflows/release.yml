@@ -1,7 +1,8 @@
 # ========
-# Este arquivo configura o fluxo de automação usando o Release-It.
-# Configurações de registro e tokens manuais foram removidos para garantir que
-# o comando npm publish consiga acionar a permissão nativa de Trusted Publishing.
+# Este arquivo configura o fluxo de automação garantindo a estabilidade máxima.
+# O gerenciamento de versão é delegado ao Release-It, enquanto a publicação
+# é feita pelo comando nativo do NPM via hooks, garantindo que o login automático
+# (OIDC / Trusted Publishing) funcione sem bloqueios de segurança de terceiros.
 # ========
 name: Release and Publish
 
@@ -40,7 +41,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Execute Release
+      - name: Execute Release and Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx release-it --ci
