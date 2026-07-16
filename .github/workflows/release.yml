@@ -1,8 +1,9 @@
 # ========
-# Este arquivo configura o fluxo automatizado de release e publicação.
-# Ele utiliza o Release-It para o versionamento e aciona o NPM nativamente
-# via hooks. O uso explícito do registry-url no setup-node é obrigatório
-# para o NPM habilitar o Trusted Publishing, dispensando o uso de tokens.
+# Fluxo definitivo para publicação OIDC (Trusted Publishing).
+# A remoção do parâmetro registry-url no setup-node é estritamente necessária.
+# Isso impede a criação de um arquivo de configuração de token vazio e força
+# o NPM a utilizar nativamente o OIDC tanto para a assinatura de proveniência
+# quanto para a autenticação direta no registro, eliminando falsos erros 404.
 # ========
 name: Release and Publish
 
@@ -32,7 +33,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-          registry-url: 'https://registry.npmjs.org'
+
+      - name: Update NPM
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm install
